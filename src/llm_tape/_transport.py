@@ -221,7 +221,8 @@ class ReplayingTransport(httpx.BaseTransport):
         self._index += 1
 
         safe_headers = {
-            k: v for k, v in interaction.response.headers.items()
+            k: v
+            for k, v in interaction.response.headers.items()
             if k.lower() not in _STRIP_RESPONSE
         }
         if interaction.is_streaming:
@@ -256,7 +257,8 @@ class ReplayingAsyncTransport(httpx.AsyncBaseTransport):
         self._index += 1
 
         safe_headers = {
-            k: v for k, v in interaction.response.headers.items()
+            k: v
+            for k, v in interaction.response.headers.items()
             if k.lower() not in _STRIP_RESPONSE
         }
         if interaction.is_streaming:
