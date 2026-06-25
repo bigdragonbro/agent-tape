@@ -41,6 +41,8 @@ These tests run in CI with no API key, in milliseconds, and catch regressions be
 
 ```bash
 pip install llm-tape
+# or with uv (faster)
+uv add llm-tape
 ```
 
 ---
