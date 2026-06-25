@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from agent_tape._tape import Tape, TapeInteraction, TapeRequest, TapeResponse
+from llm_tape._tape import Tape, TapeInteraction, TapeRequest, TapeResponse
 
 
 def _make_tape() -> Tape:

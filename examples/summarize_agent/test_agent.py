@@ -16,7 +16,7 @@ from pathlib import Path
 
 import pytest
 
-import agent_tape
+import llm_tape
 from agent import run_agent
 
 TAPE = Path(__file__).parent.parent.parent / "tapes" / "summarize_document.tape.yaml"
@@ -29,7 +29,7 @@ def result(monkeypatch):
     # The Anthropic SDK validates an API key exists before sending requests.
     # In replay mode no real call is made, but we still need a non-empty value.
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-replay-key")
-    with agent_tape.replay(TAPE) as tape:
+    with llm_tape.replay(TAPE) as tape:
         text = run_agent("Please summarize the file notes.txt", workdir=HERE)
     return text, tape
 

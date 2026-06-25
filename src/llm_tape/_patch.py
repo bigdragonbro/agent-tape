@@ -41,7 +41,7 @@ def record(path: str | Path):
 
     Usage::
 
-        with agent_tape.record("tapes/summarize.tape.yaml"):
+        with llm_tape.record("tapes/summarize.tape.yaml"):
             result = await my_agent.run("summarize document.txt")
     """
     tape = Tape()
@@ -67,13 +67,13 @@ def record(path: str | Path):
     if not tape.interactions:
         existing = Path(path).exists()
         print(
-            f"[agent-tape] Recording captured 0 interactions — "
+            f"[llm-tape] Recording captured 0 interactions — "
             f"{'existing tape left unchanged' if existing else 'nothing saved'}."
         )
         return
 
     tape.save(path)
-    print(f"[agent-tape] Saved {path} — {tape.summary()}")
+    print(f"[llm-tape] Saved {path} — {tape.summary()}")
 
 
 @contextmanager
@@ -83,7 +83,7 @@ def replay(path: str | Path):
 
     Usage::
 
-        with agent_tape.replay("tapes/summarize.tape.yaml") as tape:
+        with llm_tape.replay("tapes/summarize.tape.yaml") as tape:
             result = await my_agent.run("summarize document.txt")
             tape.assert_tool_called("read_file")
             tape.assert_task_completed()

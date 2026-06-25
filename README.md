@@ -1,4 +1,4 @@
-# agent-tape
+# llm-tape
 
 **Framework-agnostic record/replay test harness for LLM agents.**
 
@@ -20,9 +20,9 @@ Testing LLM agents is a genuinely unsolved problem. The tools developers reach f
 
 **The result:** most agent teams ship with no behavioral regression tests. When the model or prompt changes, they find out from users.
 
-### What agent-tape does differently
+### What llm-tape does differently
 
-agent-tape intercepts at the HTTP transport layer — below any framework, above the network. It records exactly what the LLM was asked and what it said, stores that as a git-committable YAML file, and replays it deterministically. Your agent code runs unchanged; it just gets pre-recorded answers instead of live API calls.
+llm-tape intercepts at the HTTP transport layer — below any framework, above the network. It records exactly what the LLM was asked and what it said, stores that as a git-committable YAML file, and replays it deterministically. Your agent code runs unchanged; it just gets pre-recorded answers instead of live API calls.
 
 Then you write assertions about structure, not content:
 
@@ -40,7 +40,7 @@ These tests run in CI with no API key, in milliseconds, and catch regressions be
 ## Install
 
 ```bash
-pip install agent-tape
+pip install llm-tape
 ```
 
 ---
@@ -51,7 +51,7 @@ pip install agent-tape
 Your agent code
       │
       ▼
-  httpx.Client / httpx.AsyncClient   ← agent-tape patches here
+  httpx.Client / httpx.AsyncClient   ← llm-tape patches here
       │
       │  record mode: wraps real transport, saves each call to tape
       │  replay mode: returns recorded responses, no network
@@ -133,14 +133,14 @@ git commit -m "chore: record summarize_agent tape"
 ```python
 # examples/summarize_agent/test_agent.py
 
-import agent_tape
+import llm_tape
 from agent import run_agent
 
 TAPE = "tapes/summarize_document.tape.yaml"
 
 @pytest.fixture
 def result():
-    with agent_tape.replay(TAPE) as tape:
+    with llm_tape.replay(TAPE) as tape:
         text = run_agent("Please summarize the file notes.txt")
     return text, tape
 
@@ -171,14 +171,14 @@ pytest examples/summarize_agent/test_agent.py
 ## Quick start (any agent)
 
 ```python
-import agent_tape
+import llm_tape
 
 # Record
-with agent_tape.record("tapes/my_agent.tape.yaml"):
+with llm_tape.record("tapes/my_agent.tape.yaml"):
     result = my_agent.run("do the thing")
 
 # Replay + assert
-with agent_tape.replay("tapes/my_agent.tape.yaml") as tape:
+with llm_tape.replay("tapes/my_agent.tape.yaml") as tape:
     result = my_agent.run("do the thing")
     tape.assert_tool_called("search")
     tape.assert_task_completed()
@@ -201,13 +201,13 @@ SSE streaming is fully supported — chunks are captured and replayed exactly as
 
 ```python
 # Record a streaming run
-with agent_tape.record("tapes/streaming.tape.yaml"):
+with llm_tape.record("tapes/streaming.tape.yaml"):
     with client.messages.stream(model="claude-sonnet-4-6", ...) as stream:
         for text in stream.text_stream:
             print(text, end="", flush=True)
 
 # Replay — same streaming interface, no API call
-with agent_tape.replay("tapes/streaming.tape.yaml") as tape:
+with llm_tape.replay("tapes/streaming.tape.yaml") as tape:
     with client.messages.stream(...) as stream:
         full_text = stream.get_final_text()
     tape.assert_task_completed()
@@ -254,7 +254,7 @@ The Anthropic SDK validates that an API key exists before making any call. In re
 @pytest.fixture
 def result(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-replay-key")
-    with agent_tape.replay("tapes/my_agent.tape.yaml") as tape:
+    with llm_tape.replay("tapes/my_agent.tape.yaml") as tape:
         text = run_agent("do the thing")
     return text, tape
 ```
@@ -332,8 +332,8 @@ See [`tapes/summarize_document.tape.yaml`](tapes/summarize_document.tape.yaml) f
 ## Contributing
 
 ```bash
-git clone https://github.com/bigdragonbro/agent-tape
-cd agent-tape
+git clone https://github.com/bigdragonbro/llm-tape
+cd llm-tape
 python -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 pytest
@@ -342,7 +342,7 @@ pytest
 PRs welcome. Current roadmap:
 - [ ] Parallel call support (non-sequential replay)
 - [ ] Pre-built injection helpers for LangChain / CrewAI early-init
-- [ ] `agent-tape diff` CLI for comparing two tape files
+- [ ] `llm-tape diff` CLI for comparing two tape files
 - [ ] VS Code extension for tape visualization
 
 ---

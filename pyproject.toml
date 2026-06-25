@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "agent-tape"
+name = "llm-tape"
 version = "0.1.0"
 description = "Framework-agnostic record/replay test harness for LLM agents"
 readme = "README.md"
@@ -31,21 +31,21 @@ test = [
     "respx>=0.21",
 ]
 dev = [
-    "agent-tape[test]",
+    "llm-tape[test]",
     "hatch",
     "ruff",
     "mypy",
 ]
 
 [project.entry-points."pytest11"]
-agent_tape = "agent_tape.pytest_plugin"
+llm_tape = "llm_tape.pytest_plugin"
 
 [project.urls]
-Homepage = "https://github.com/yourusername/agent-tape"
-Issues = "https://github.com/yourusername/agent-tape/issues"
+Homepage = "https://github.com/bigdragonbro/agent-tape"
+Issues = "https://github.com/bigdragonbro/agent-tape/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/agent_tape"]
+packages = ["src/llm_tape"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

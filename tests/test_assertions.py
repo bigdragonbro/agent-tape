@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from agent_tape._assertions import TapeAssertions
-from agent_tape._tape import Tape, TapeInteraction, TapeRequest, TapeResponse
+from llm_tape._assertions import TapeAssertions
+from llm_tape._tape import Tape, TapeInteraction, TapeRequest, TapeResponse
 
 
 def _tape_with_calls(*tool_names: str, stop_reason: str = "end_turn") -> Tape:

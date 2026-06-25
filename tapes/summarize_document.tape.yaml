@@ -166,7 +166,7 @@ interactions:
         - type: tool_result
           tool_use_id: toolu_019QTPcZzcx1yBzLHSrNco6w
           content: "Meeting notes — 2026-06-24\n\nAttendees: Jason, Sarah, Dev team\n\
-            \nTopics:\n1. agent-tape OSS launch\n   - Shipping v0.1.0 this week\n\
+            \nTopics:\n1. llm-tape OSS launch\n   - Shipping v0.1.0 this week\n\
             \   - Need blog post and HN announcement\n   - PyPI trusted publishing\
             \ is set up\n\n2. Streaming support\n   - SSE recording/replay is now\
             \ working\n   - All 40 tests passing\n   - Sarah will add OpenAI streaming\
@@ -253,7 +253,7 @@ interactions:
             Attendees: Jason, Sarah, and the Dev team discussed four main topics:
 
 
-            1. **agent-tape OSS Launch:** Version 0.1.0 is shipping this week, with
+            1. **llm-tape OSS Launch:** Version 0.1.0 is shipping this week, with
             a blog post and Hacker News announcement planned. PyPI trusted publishing
             is already configured.
 
@@ -333,7 +333,7 @@ interactions:
         - type: tool_result
           tool_use_id: toolu_019QTPcZzcx1yBzLHSrNco6w
           content: "Meeting notes — 2026-06-24\n\nAttendees: Jason, Sarah, Dev team\n\
-            \nTopics:\n1. agent-tape OSS launch\n   - Shipping v0.1.0 this week\n\
+            \nTopics:\n1. llm-tape OSS launch\n   - Shipping v0.1.0 this week\n\
             \   - Need blog post and HN announcement\n   - PyPI trusted publishing\
             \ is set up\n\n2. Streaming support\n   - SSE recording/replay is now\
             \ working\n   - All 40 tests passing\n   - Sarah will add OpenAI streaming\
@@ -357,7 +357,7 @@ interactions:
               Attendees: Jason, Sarah, and the Dev team discussed four main topics:
 
 
-              1. **agent-tape OSS Launch:** Version 0.1.0 is shipping this week, with
+              1. **llm-tape OSS Launch:** Version 0.1.0 is shipping this week, with
               a blog post and Hacker News announcement planned. PyPI trusted publishing
               is already configured.
 
@@ -380,7 +380,7 @@ interactions:
         content:
         - type: tool_result
           tool_use_id: toolu_01KwghxgFnTnuGB5P3KbarD2
-          content: Summary written to /Users/longyang/srcs/agent-tape/examples/summarize_agent/notes_summary.txt
+          content: Summary written to /Users/longyang/srcs/llm-tape/examples/summarize_agent/notes_summary.txt
       model: claude-sonnet-4-6
       system: You are a helpful assistant. When asked to summarize a file, use read_file
         to get its contents, then write_summary to save a concise summary. Always
@@ -452,7 +452,7 @@ interactions:
 
           The meeting (June 24, 2026) covered four key areas:
 
-          - **OSS Launch:** `agent-tape` v0.1.0 ships this week with a blog post and
+          - **OSS Launch:** `llm-tape` v0.1.0 ships this week with a blog post and
           HN announcement.
 
           - **Streaming:** SSE recording/replay is working with all 40 tests passing;

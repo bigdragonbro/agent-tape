@@ -12,8 +12,8 @@ from pathlib import Path
 
 import pytest
 
-import agent_tape
-from agent_tape._tape import Tape
+import llm_tape
+from llm_tape._tape import Tape
 
 from .conftest import (
     anthropic_end_turn_response,
@@ -32,7 +32,7 @@ async def test_async_record_then_replay(tmp_path: Path) -> None:
     needing real network calls. The isolated tests below cover the same
     assertion API; this test verifies the file round-trip specifically.
     """
-    from agent_tape._tape import TapeInteraction, TapeRequest, TapeResponse
+    from llm_tape._tape import TapeInteraction, TapeRequest, TapeResponse
 
     tape_path = tmp_path / "agent_run.tape.yaml"
 
@@ -60,7 +60,7 @@ async def test_async_record_then_replay(tmp_path: Path) -> None:
     assert len(loaded.interactions) == 3
 
     # Replay the saved tape and assert behavior
-    with agent_tape.replay(tape_path) as ta:
+    with llm_tape.replay(tape_path) as ta:
         await fake_agent_async(baked)
 
     ta.assert_tool_called("read_file", before="summarize")
@@ -73,7 +73,7 @@ async def test_async_record_replay_isolated(tmp_path: Path) -> None:
     Single-flow test: record using our transport, replay using our transport.
     The RecordingTransport wraps a fake inner transport (not real network).
     """
-    from agent_tape._tape import TapeInteraction, TapeRequest, TapeResponse
+    from llm_tape._tape import TapeInteraction, TapeRequest, TapeResponse
 
     baked = [
         anthropic_tool_use_response("read_file", {"path": "doc.txt"}),
@@ -96,7 +96,7 @@ async def test_async_record_replay_isolated(tmp_path: Path) -> None:
     tape.save(tape_path)
 
     # Replay phase
-    with agent_tape.replay(tape_path) as ta:
+    with llm_tape.replay(tape_path) as ta:
         results = await fake_agent_async(baked)
 
     assert len(results) == 2
@@ -115,7 +115,7 @@ async def test_async_record_replay_isolated(tmp_path: Path) -> None:
 
 def test_sync_record_replay_isolated(tmp_path: Path) -> None:
     """Same as the async isolated test but using httpx.Client (sync)."""
-    from agent_tape._tape import TapeInteraction, TapeRequest, TapeResponse
+    from llm_tape._tape import TapeInteraction, TapeRequest, TapeResponse
 
     baked = [
         anthropic_tool_use_response("search_web", {"query": "agent testing"}),
@@ -137,7 +137,7 @@ def test_sync_record_replay_isolated(tmp_path: Path) -> None:
     tape_path = tmp_path / "sync.tape.yaml"
     tape.save(tape_path)
 
-    with agent_tape.replay(tape_path) as ta:
+    with llm_tape.replay(tape_path) as ta:
         results = fake_agent_sync(baked)
 
     assert len(results) == 3
@@ -152,7 +152,7 @@ def test_sync_record_replay_isolated(tmp_path: Path) -> None:
 
 def test_replay_exhaustion_raises(tmp_path: Path) -> None:
     """If the agent makes more calls than recorded, raise a clear error."""
-    from agent_tape._tape import TapeInteraction, TapeRequest, TapeResponse
+    from llm_tape._tape import TapeInteraction, TapeRequest, TapeResponse
 
     tape = Tape()
     tape.interactions.append(
@@ -167,7 +167,7 @@ def test_replay_exhaustion_raises(tmp_path: Path) -> None:
     tape.save(tape_path)
 
     with pytest.raises(RuntimeError, match="Tape exhausted"):
-        with agent_tape.replay(tape_path):
+        with llm_tape.replay(tape_path):
             # Agent tries to make 2 calls but only 1 is recorded
             fake_agent_sync([anthropic_end_turn_response(), anthropic_end_turn_response()])
 

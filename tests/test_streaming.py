@@ -8,8 +8,8 @@ from pathlib import Path
 import httpx
 import pytest
 
-import agent_tape
-from agent_tape._tape import (
+import llm_tape
+from llm_tape._tape import (
     Tape,
     TapeInteraction,
     TapeRequest,
@@ -17,7 +17,7 @@ from agent_tape._tape import (
     _tool_calls_from_sse,
     _sse_stop_reason,
 )
-from agent_tape._assertions import TapeAssertions
+from llm_tape._assertions import TapeAssertions
 
 
 # ── SSE fixture helpers ───────────────────────────────────────────────────────
@@ -235,7 +235,7 @@ async def test_replay_streaming_response(tmp_path: Path) -> None:
 
     received: list[bytes] = []
 
-    with agent_tape.replay(tape_path):
+    with llm_tape.replay(tape_path):
         async with httpx.AsyncClient() as client:
             async with client.stream(
                 "POST",
@@ -262,7 +262,7 @@ def test_replay_streaming_sync(tmp_path: Path) -> None:
 
     received: list[bytes] = []
 
-    with agent_tape.replay(tape_path):
+    with llm_tape.replay(tape_path):
         with httpx.Client() as client:
             with client.stream(
                 "POST",

@@ -2,7 +2,7 @@
 A minimal file-summarizer agent built with the Anthropic SDK.
 
 The agent can read files and write summaries using two tools.
-This is the code whose behavior agent-tape records and tests.
+This is the code whose behavior llm-tape records and tests.
 
 Run directly:
     ANTHROPIC_API_KEY=... python examples/summarize_agent/agent.py

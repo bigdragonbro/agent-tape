@@ -14,7 +14,7 @@ After that, CI replays it for free via test_agent.py.
 """
 from pathlib import Path
 
-import agent_tape
+import llm_tape
 from agent import run_agent
 
 TAPE_PATH = Path(__file__).parent.parent.parent / "tapes" / "summarize_document.tape.yaml"
@@ -22,7 +22,7 @@ HERE = Path(__file__).parent
 
 print(f"Recording to: {TAPE_PATH}")
 
-with agent_tape.record(TAPE_PATH):
+with llm_tape.record(TAPE_PATH):
     result = run_agent("Please summarize the file notes.txt", workdir=HERE)
 
 print(f"\nAgent result:\n{result}")
