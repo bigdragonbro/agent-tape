@@ -1,197 +1,481 @@
-# Example tape recorded from a real agent run using the Anthropic SDK.
-# Commit tapes to git — they are the source of truth for expected behavior.
-# Sensitive headers are automatically scrubbed to "***" during recording.
-
 version: '1'
-metadata:
-  recorded_at: '2026-06-24T10:00:00Z'
-  agent_tape_version: '0.1.0'
-  task: Summarize a local document using a two-step read → summarize agent
-
+metadata: {}
 interactions:
-  - id: call_0
-    timestamp: 1750762800.0
-    duration_ms: 412.3
-
-    request:
-      method: POST
-      url: https://api.anthropic.com/v1/messages
-      headers:
-        x-api-key: '***'
-        content-type: application/json
-        anthropic-version: '2023-06-01'
-      body:
-        model: claude-sonnet-4-6
-        max_tokens: 4096
-        system: You are a helpful assistant that summarizes documents.
-        messages:
-          - role: user
-            content: Please summarize the file notes.txt
-        tools:
-          - name: read_file
-            description: Read the contents of a local file
-            input_schema:
-              type: object
-              properties:
-                path:
-                  type: string
-                  description: Relative path to the file
-              required:
-                - path
-          - name: write_summary
-            description: Write a summary to disk
-            input_schema:
-              type: object
-              properties:
-                content:
-                  type: string
-                path:
-                  type: string
-              required:
-                - content
-                - path
-
-    response:
-      status: 200
-      headers:
-        content-type: application/json
-        request-id: req_01AbCdEfGhIj
-      body:
-        id: msg_01AbCdEf
-        type: message
-        role: assistant
-        model: claude-sonnet-4-6
-        stop_reason: tool_use
+- id: call_0
+  timestamp: 1782371111.001
+  duration_ms: 1993.78
+  request:
+    method: POST
+    url: https://api.anthropic.com/v1/messages
+    headers:
+      host: api.anthropic.com
+      accept-encoding: gzip, deflate
+      connection: keep-alive
+      x-stainless-timeout: '600'
+      accept: application/json
+      content-type: application/json
+      user-agent: Anthropic/Python 0.112.0
+      x-stainless-lang: python
+      x-stainless-package-version: 0.112.0
+      x-stainless-os: MacOS
+      x-stainless-arch: arm64
+      x-stainless-runtime: CPython
+      x-stainless-runtime-version: 3.14.6
+      x-api-key: '***'
+      x-stainless-async: 'false'
+      anthropic-version: '2023-06-01'
+      x-stainless-retry-count: '0'
+      x-stainless-read-timeout: '600'
+      content-length: '819'
+    body:
+      max_tokens: 4096
+      messages:
+      - role: user
+        content: Please summarize the file notes.txt
+      model: claude-sonnet-4-6
+      system: You are a helpful assistant. When asked to summarize a file, use read_file
+        to get its contents, then write_summary to save a concise summary. Always
+        finish with end_turn once done.
+      tools:
+      - name: read_file
+        description: Read the contents of a local text file.
+        input_schema:
+          type: object
+          properties:
+            path:
+              type: string
+              description: Relative path to the file
+          required:
+          - path
+      - name: write_summary
+        description: Write the final summary to a file on disk.
+        input_schema:
+          type: object
+          properties:
+            content:
+              type: string
+              description: The summary text
+            path:
+              type: string
+              description: Output file path
+          required:
+          - content
+          - path
+  response:
+    status: 200
+    headers:
+      date: Thu, 25 Jun 2026 07:05:11 GMT
+      content-type: application/json
+      transfer-encoding: chunked
+      connection: keep-alive
+      anthropic-ratelimit-input-tokens-limit: '500000'
+      anthropic-ratelimit-input-tokens-remaining: '500000'
+      anthropic-ratelimit-input-tokens-reset: '2026-06-25T07:05:10Z'
+      anthropic-ratelimit-output-tokens-limit: '80000'
+      anthropic-ratelimit-output-tokens-remaining: '80000'
+      anthropic-ratelimit-output-tokens-reset: '2026-06-25T07:05:10Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2026-06-25T07:05:09Z'
+      anthropic-ratelimit-tokens-limit: '580000'
+      anthropic-ratelimit-tokens-remaining: '580000'
+      anthropic-ratelimit-tokens-reset: '2026-06-25T07:05:10Z'
+      request-id: req_011CcPZ2n9ubZd5zKy5ABx2G
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 46f1b1f4-a2f2-4f06-aa33-99a001250ae3
+      traceresponse: 00-9948486e7dddba2ddb7cdec845ede9e9-2381654ea0e324ba-01
+      server: cloudflare
+      content-encoding: gzip
+      vary: Accept-Encoding
+      cf-cache-status: DYNAMIC
+      set-cookie: '***'
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      x-robots-tag: none
+      cf-ray: a1121f47fec11b51-SJC
+    body:
+      model: claude-sonnet-4-6
+      id: msg_01RP5FFwjqqxMVDb4aQ2ZvXj
+      type: message
+      role: assistant
+      content:
+      - type: text
+        text: Sure! Let me start by reading the file.
+      - type: tool_use
+        id: toolu_019QTPcZzcx1yBzLHSrNco6w
+        name: read_file
+        input:
+          path: notes.txt
+        caller:
+          type: direct
+      stop_reason: tool_use
+      stop_sequence: null
+      stop_details: null
+      usage:
+        input_tokens: 709
+        cache_creation_input_tokens: 0
+        cache_read_input_tokens: 0
+        cache_creation:
+          ephemeral_5m_input_tokens: 0
+          ephemeral_1h_input_tokens: 0
+        output_tokens: 66
+        service_tier: standard
+        inference_geo: global
+- id: call_1
+  timestamp: 1782371116.013
+  duration_ms: 4982.92
+  request:
+    method: POST
+    url: https://api.anthropic.com/v1/messages
+    headers:
+      host: api.anthropic.com
+      accept-encoding: gzip, deflate
+      connection: keep-alive
+      x-stainless-timeout: '600'
+      accept: application/json
+      content-type: application/json
+      user-agent: Anthropic/Python 0.112.0
+      x-stainless-lang: python
+      x-stainless-package-version: 0.112.0
+      x-stainless-os: MacOS
+      x-stainless-arch: arm64
+      x-stainless-runtime: CPython
+      x-stainless-runtime-version: 3.14.6
+      x-api-key: '***'
+      x-stainless-async: 'false'
+      anthropic-version: '2023-06-01'
+      x-stainless-retry-count: '0'
+      x-stainless-read-timeout: '600'
+      cookie: '***'
+      content-length: '1802'
+    body:
+      max_tokens: 4096
+      messages:
+      - role: user
+        content: Please summarize the file notes.txt
+      - role: assistant
         content:
-          - type: tool_use
-            id: toolu_01
-            name: read_file
-            input:
-              path: notes.txt
-        usage:
-          input_tokens: 312
-          output_tokens: 48
-
-  - id: call_1
-    timestamp: 1750762801.2
-    duration_ms: 891.7
-
-    request:
-      method: POST
-      url: https://api.anthropic.com/v1/messages
-      headers:
-        x-api-key: '***'
-        content-type: application/json
-        anthropic-version: '2023-06-01'
-      body:
-        model: claude-sonnet-4-6
-        max_tokens: 4096
-        system: You are a helpful assistant that summarizes documents.
-        messages:
-          - role: user
-            content: Please summarize the file notes.txt
-          - role: assistant
-            content:
-              - type: tool_use
-                id: toolu_01
-                name: read_file
-                input:
-                  path: notes.txt
-          - role: user
-            content:
-              - type: tool_result
-                tool_use_id: toolu_01
-                content: "Meeting notes from 2026-06-24:\n- Ship agent-tape v0.1\n- Add streaming support\n- Write blog post"
-        tools:
-          - name: read_file
-            description: Read the contents of a local file
-            input_schema:
-              type: object
-              properties:
-                path:
-                  type: string
-              required:
-                - path
-          - name: write_summary
-            description: Write a summary to disk
-            input_schema:
-              type: object
-              properties:
-                content:
-                  type: string
-                path:
-                  type: string
-              required:
-                - content
-                - path
-
-    response:
-      status: 200
-      headers:
-        content-type: application/json
-        request-id: req_02KlMnOpQrSt
-      body:
-        id: msg_02KlMnOp
-        type: message
-        role: assistant
-        model: claude-sonnet-4-6
-        stop_reason: tool_use
+        - type: text
+          text: Sure! Let me start by reading the file.
+        - type: tool_use
+          id: toolu_019QTPcZzcx1yBzLHSrNco6w
+          name: read_file
+          input:
+            path: notes.txt
+      - role: user
         content:
-          - type: tool_use
-            id: toolu_02
-            name: write_summary
-            input:
-              content: "Summary of 2026-06-24 meeting: Team plans to ship agent-tape v0.1 with streaming support, followed by a blog post announcement."
-              path: summary.txt
-        usage:
-          input_tokens: 480
-          output_tokens: 72
-
-  - id: call_2
-    timestamp: 1750762802.5
-    duration_ms: 334.1
-
-    request:
-      method: POST
-      url: https://api.anthropic.com/v1/messages
-      headers:
-        x-api-key: '***'
-        content-type: application/json
-        anthropic-version: '2023-06-01'
-      body:
-        model: claude-sonnet-4-6
-        max_tokens: 4096
-        messages:
-          - role: user
-            content: Please summarize the file notes.txt
-          - role: assistant
+        - type: tool_result
+          tool_use_id: toolu_019QTPcZzcx1yBzLHSrNco6w
+          content: "Meeting notes — 2026-06-24\n\nAttendees: Jason, Sarah, Dev team\n\
+            \nTopics:\n1. agent-tape OSS launch\n   - Shipping v0.1.0 this week\n\
+            \   - Need blog post and HN announcement\n   - PyPI trusted publishing\
+            \ is set up\n\n2. Streaming support\n   - SSE recording/replay is now\
+            \ working\n   - All 40 tests passing\n   - Sarah will add OpenAI streaming\
+            \ tests next sprint\n\n3. Next priorities\n   - Parallel tool call support\
+            \ (currently sequential only)\n   - Pre-built client injection for frameworks\
+            \ that init early\n   - VS Code extension for tape visualization\n\n4.\
+            \ Community\n   - Setting up Discord\n   - Looking for early adopters\
+            \ from LangChain/CrewAI communities\n"
+      model: claude-sonnet-4-6
+      system: You are a helpful assistant. When asked to summarize a file, use read_file
+        to get its contents, then write_summary to save a concise summary. Always
+        finish with end_turn once done.
+      tools:
+      - name: read_file
+        description: Read the contents of a local text file.
+        input_schema:
+          type: object
+          properties:
+            path:
+              type: string
+              description: Relative path to the file
+          required:
+          - path
+      - name: write_summary
+        description: Write the final summary to a file on disk.
+        input_schema:
+          type: object
+          properties:
             content:
-              - type: tool_use
-                id: toolu_02
-                name: write_summary
-                input:
-                  content: "Summary of 2026-06-24 meeting: Team plans to ship agent-tape v0.1."
-                  path: summary.txt
-          - role: user
-            content:
-              - type: tool_result
-                tool_use_id: toolu_02
-                content: "Written to summary.txt"
+              type: string
+              description: The summary text
+            path:
+              type: string
+              description: Output file path
+          required:
+          - content
+          - path
+  response:
+    status: 200
+    headers:
+      date: Thu, 25 Jun 2026 07:05:15 GMT
+      content-type: application/json
+      transfer-encoding: chunked
+      connection: keep-alive
+      anthropic-ratelimit-input-tokens-limit: '500000'
+      anthropic-ratelimit-input-tokens-remaining: '499000'
+      anthropic-ratelimit-input-tokens-reset: '2026-06-25T07:05:12Z'
+      anthropic-ratelimit-output-tokens-limit: '80000'
+      anthropic-ratelimit-output-tokens-remaining: '80000'
+      anthropic-ratelimit-output-tokens-reset: '2026-06-25T07:05:16Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2026-06-25T07:05:11Z'
+      anthropic-ratelimit-tokens-limit: '580000'
+      anthropic-ratelimit-tokens-remaining: '579000'
+      anthropic-ratelimit-tokens-reset: '2026-06-25T07:05:12Z'
+      request-id: req_011CcPZ2vYSYKUHScvTGu5E7
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 46f1b1f4-a2f2-4f06-aa33-99a001250ae3
+      traceresponse: 00-4c09fab3c44b022fc0e966a5140b6c96-5e907f06c62693a3-01
+      server: cloudflare
+      content-encoding: gzip
+      vary: Accept-Encoding
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-ray: a1121f5438ad1b51-SJC
+    body:
+      model: claude-sonnet-4-6
+      id: msg_01SLbL9jbNZDgFaaSfi2Yq4a
+      type: message
+      role: assistant
+      content:
+      - type: text
+        text: Great, I have the contents. Now let me write the summary.
+      - type: tool_use
+        id: toolu_01KwghxgFnTnuGB5P3KbarD2
+        name: write_summary
+        input:
+          path: notes_summary.txt
+          content: 'Summary of Meeting Notes (2026-06-24):
 
-    response:
-      status: 200
-      headers:
-        content-type: application/json
-        request-id: req_03UvWxYzAaBb
-      body:
-        id: msg_03UvWxYz
-        type: message
-        role: assistant
-        model: claude-sonnet-4-6
-        stop_reason: end_turn
+
+            Attendees: Jason, Sarah, and the Dev team discussed four main topics:
+
+
+            1. **agent-tape OSS Launch:** Version 0.1.0 is shipping this week, with
+            a blog post and Hacker News announcement planned. PyPI trusted publishing
+            is already configured.
+
+
+            2. **Streaming Support:** SSE recording/replay is fully functional, all
+            40 tests are passing, and Sarah will add OpenAI streaming tests in the
+            next sprint.
+
+
+            3. **Next Priorities:** The team plans to tackle parallel tool call support
+            (currently sequential), pre-built client injection for early-initializing
+            frameworks, and a VS Code extension for tape visualization.
+
+
+            4. **Community Building:** A Discord server is being set up, and the team
+            is targeting early adopters from the LangChain and CrewAI communities.
+
+            '
+        caller:
+          type: direct
+      stop_reason: tool_use
+      stop_sequence: null
+      stop_details: null
+      usage:
+        input_tokens: 963
+        cache_creation_input_tokens: 0
+        cache_read_input_tokens: 0
+        cache_creation:
+          ephemeral_5m_input_tokens: 0
+          ephemeral_1h_input_tokens: 0
+        output_tokens: 280
+        service_tier: standard
+        inference_geo: global
+- id: call_2
+  timestamp: 1782371121.459
+  duration_ms: 5436.73
+  request:
+    method: POST
+    url: https://api.anthropic.com/v1/messages
+    headers:
+      host: api.anthropic.com
+      accept-encoding: gzip, deflate
+      connection: keep-alive
+      x-stainless-timeout: '600'
+      accept: application/json
+      content-type: application/json
+      user-agent: Anthropic/Python 0.112.0
+      x-stainless-lang: python
+      x-stainless-package-version: 0.112.0
+      x-stainless-os: MacOS
+      x-stainless-arch: arm64
+      x-stainless-runtime: CPython
+      x-stainless-runtime-version: 3.14.6
+      x-api-key: '***'
+      x-stainless-async: 'false'
+      anthropic-version: '2023-06-01'
+      x-stainless-retry-count: '0'
+      x-stainless-read-timeout: '600'
+      cookie: '***'
+      content-length: '3058'
+    body:
+      max_tokens: 4096
+      messages:
+      - role: user
+        content: Please summarize the file notes.txt
+      - role: assistant
         content:
-          - type: text
-            text: "Done! I've read notes.txt and written a summary to summary.txt."
-        usage:
-          input_tokens: 560
-          output_tokens: 22
+        - type: text
+          text: Sure! Let me start by reading the file.
+        - type: tool_use
+          id: toolu_019QTPcZzcx1yBzLHSrNco6w
+          name: read_file
+          input:
+            path: notes.txt
+      - role: user
+        content:
+        - type: tool_result
+          tool_use_id: toolu_019QTPcZzcx1yBzLHSrNco6w
+          content: "Meeting notes — 2026-06-24\n\nAttendees: Jason, Sarah, Dev team\n\
+            \nTopics:\n1. agent-tape OSS launch\n   - Shipping v0.1.0 this week\n\
+            \   - Need blog post and HN announcement\n   - PyPI trusted publishing\
+            \ is set up\n\n2. Streaming support\n   - SSE recording/replay is now\
+            \ working\n   - All 40 tests passing\n   - Sarah will add OpenAI streaming\
+            \ tests next sprint\n\n3. Next priorities\n   - Parallel tool call support\
+            \ (currently sequential only)\n   - Pre-built client injection for frameworks\
+            \ that init early\n   - VS Code extension for tape visualization\n\n4.\
+            \ Community\n   - Setting up Discord\n   - Looking for early adopters\
+            \ from LangChain/CrewAI communities\n"
+      - role: assistant
+        content:
+        - type: text
+          text: Great, I have the contents. Now let me write the summary.
+        - type: tool_use
+          id: toolu_01KwghxgFnTnuGB5P3KbarD2
+          name: write_summary
+          input:
+            path: notes_summary.txt
+            content: 'Summary of Meeting Notes (2026-06-24):
+
+
+              Attendees: Jason, Sarah, and the Dev team discussed four main topics:
+
+
+              1. **agent-tape OSS Launch:** Version 0.1.0 is shipping this week, with
+              a blog post and Hacker News announcement planned. PyPI trusted publishing
+              is already configured.
+
+
+              2. **Streaming Support:** SSE recording/replay is fully functional,
+              all 40 tests are passing, and Sarah will add OpenAI streaming tests
+              in the next sprint.
+
+
+              3. **Next Priorities:** The team plans to tackle parallel tool call
+              support (currently sequential), pre-built client injection for early-initializing
+              frameworks, and a VS Code extension for tape visualization.
+
+
+              4. **Community Building:** A Discord server is being set up, and the
+              team is targeting early adopters from the LangChain and CrewAI communities.
+
+              '
+      - role: user
+        content:
+        - type: tool_result
+          tool_use_id: toolu_01KwghxgFnTnuGB5P3KbarD2
+          content: Summary written to /Users/longyang/srcs/agent-tape/examples/summarize_agent/notes_summary.txt
+      model: claude-sonnet-4-6
+      system: You are a helpful assistant. When asked to summarize a file, use read_file
+        to get its contents, then write_summary to save a concise summary. Always
+        finish with end_turn once done.
+      tools:
+      - name: read_file
+        description: Read the contents of a local text file.
+        input_schema:
+          type: object
+          properties:
+            path:
+              type: string
+              description: Relative path to the file
+          required:
+          - path
+      - name: write_summary
+        description: Write the final summary to a file on disk.
+        input_schema:
+          type: object
+          properties:
+            content:
+              type: string
+              description: The summary text
+            path:
+              type: string
+              description: Output file path
+          required:
+          - content
+          - path
+  response:
+    status: 200
+    headers:
+      date: Thu, 25 Jun 2026 07:05:21 GMT
+      content-type: application/json
+      transfer-encoding: chunked
+      connection: keep-alive
+      anthropic-ratelimit-input-tokens-limit: '500000'
+      anthropic-ratelimit-input-tokens-remaining: '499000'
+      anthropic-ratelimit-input-tokens-reset: '2026-06-25T07:05:18Z'
+      anthropic-ratelimit-output-tokens-limit: '80000'
+      anthropic-ratelimit-output-tokens-remaining: '80000'
+      anthropic-ratelimit-output-tokens-reset: '2026-06-25T07:05:21Z'
+      anthropic-ratelimit-requests-limit: '1000'
+      anthropic-ratelimit-requests-remaining: '999'
+      anthropic-ratelimit-requests-reset: '2026-06-25T07:05:16Z'
+      anthropic-ratelimit-tokens-limit: '580000'
+      anthropic-ratelimit-tokens-remaining: '579000'
+      anthropic-ratelimit-tokens-reset: '2026-06-25T07:05:18Z'
+      request-id: req_011CcPZ3JRaLAyJ1bhWzWc9K
+      strict-transport-security: max-age=31536000; includeSubDomains; preload
+      anthropic-organization-id: 46f1b1f4-a2f2-4f06-aa33-99a001250ae3
+      traceresponse: 00-47438f8e5c54034839716a147e3945b2-b501bd92716c96b3-01
+      server: cloudflare
+      content-encoding: gzip
+      vary: Accept-Encoding
+      cf-cache-status: DYNAMIC
+      x-robots-tag: none
+      content-security-policy: default-src 'none'; frame-ancestors 'none'
+      cf-ray: a1121f736b851b51-SJC
+    body:
+      model: claude-sonnet-4-6
+      id: msg_018XhxFeAUNgXrPak1nwXVfH
+      type: message
+      role: assistant
+      content:
+      - type: text
+        text: 'Done! Here''s what I found and saved:
+
+
+          The meeting (June 24, 2026) covered four key areas:
+
+          - **OSS Launch:** `agent-tape` v0.1.0 ships this week with a blog post and
+          HN announcement.
+
+          - **Streaming:** SSE recording/replay is working with all 40 tests passing;
+          OpenAI streaming tests are next.
+
+          - **Upcoming Work:** Parallel tool calls, early-client injection for frameworks,
+          and a VS Code visualization extension.
+
+          - **Community:** A Discord is in the works, targeting LangChain/CrewAI users
+          as early adopters.
+
+
+          The summary has been saved to `notes_summary.txt`.'
+      stop_reason: end_turn
+      stop_sequence: null
+      stop_details: null
+      usage:
+        input_tokens: 1283
+        cache_creation_input_tokens: 0
+        cache_read_input_tokens: 0
+        cache_creation:
+          ephemeral_5m_input_tokens: 0
+          ephemeral_1h_input_tokens: 0
+        output_tokens: 158
+        service_tier: standard
+        inference_geo: global
