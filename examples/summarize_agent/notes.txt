@@ -1,0 +1,23 @@
+Meeting notes — 2026-06-24
+
+Attendees: Jason, Sarah, Dev team
+
+Topics:
+1. agent-tape OSS launch
+   - Shipping v0.1.0 this week
+   - Need blog post and HN announcement
+   - PyPI trusted publishing is set up
+
+2. Streaming support
+   - SSE recording/replay is now working
+   - All 40 tests passing
+   - Sarah will add OpenAI streaming tests next sprint
+
+3. Next priorities
+   - Parallel tool call support (currently sequential only)
+   - Pre-built client injection for frameworks that init early
+   - VS Code extension for tape visualization
+
+4. Community
+   - Setting up Discord
+   - Looking for early adopters from LangChain/CrewAI communities
