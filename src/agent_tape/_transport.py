@@ -9,10 +9,18 @@ import httpx
 from ._tape import Tape, TapeInteraction, TapeRequest, TapeResponse
 
 _SCRUB = frozenset({"authorization", "x-api-key", "cookie", "set-cookie"})
+# After read(), the body is already decompressed. Drop this header so httpx
+# doesn't attempt a second decompression pass on the response we hand back.
+_STRIP_RESPONSE = frozenset({"content-encoding", "transfer-encoding"})
 
 
 def _scrub(headers: dict[str, str]) -> dict[str, str]:
     return {k: ("***" if k.lower() in _SCRUB else v) for k, v in headers.items()}
+
+
+def _decoded_headers(headers: httpx.Headers) -> dict[str, str]:
+    """Return headers safe to use on a pre-decoded response body."""
+    return {k: v for k, v in headers.items() if k.lower() not in _STRIP_RESPONSE}
 
 
 def _is_sse(headers: dict[str, str]) -> bool:
@@ -99,7 +107,7 @@ class RecordingTransport(httpx.BaseTransport):
             )
             return httpx.Response(
                 status_code=response.status_code,
-                headers=response.headers,
+                headers=_decoded_headers(response.headers),
                 stream=_ChunkStream(chunks),
                 request=request,
             )
@@ -119,7 +127,7 @@ class RecordingTransport(httpx.BaseTransport):
         )
         return httpx.Response(
             status_code=response.status_code,
-            headers=response.headers,
+            headers=_decoded_headers(response.headers),
             content=resp_content,
             request=request,
         )
@@ -164,7 +172,7 @@ class RecordingAsyncTransport(httpx.AsyncBaseTransport):
             )
             return httpx.Response(
                 status_code=response.status_code,
-                headers=response.headers,
+                headers=_decoded_headers(response.headers),
                 stream=_AsyncChunkStream(chunks),
                 request=request,
             )
@@ -184,7 +192,7 @@ class RecordingAsyncTransport(httpx.AsyncBaseTransport):
         )
         return httpx.Response(
             status_code=response.status_code,
-            headers=response.headers,
+            headers=_decoded_headers(response.headers),
             content=resp_content,
             request=request,
         )
