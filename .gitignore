@@ -10,3 +10,4 @@ build/
 .ruff_cache/
 *.tape.yaml
 !tapes/*.tape.yaml
+examples/**/*_summary.txt

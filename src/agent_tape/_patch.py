@@ -53,6 +53,14 @@ def record(path: str | Path):
     ):
         yield tape
 
+    if not tape.interactions:
+        existing = Path(path).exists()
+        print(
+            f"[agent-tape] Recording captured 0 interactions — "
+            f"{'existing tape left unchanged' if existing else 'nothing saved'}."
+        )
+        return
+
     tape.save(path)
     print(f"[agent-tape] Saved {path} — {tape.summary()}")
 
