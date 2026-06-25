@@ -2,6 +2,10 @@
 Context managers that transparently patch httpx so any code using
 httpx.Client or httpx.AsyncClient is intercepted — no framework-specific
 hooks required.
+
+We wrap whatever transport the caller passes rather than replacing it,
+so SDKs that supply their own transport (e.g. Anthropic's retry transport)
+are still intercepted correctly.
 """
 
 from __future__ import annotations
@@ -22,6 +26,14 @@ from ._transport import (
 )
 
 
+def _wrap_sync(tape: Tape, existing: httpx.BaseTransport | None) -> RecordingTransport:
+    return RecordingTransport(tape, wrapped=existing or httpx.HTTPTransport())
+
+
+def _wrap_async(tape: Tape, existing: httpx.AsyncBaseTransport | None) -> RecordingAsyncTransport:
+    return RecordingAsyncTransport(tape, wrapped=existing or httpx.AsyncHTTPTransport())
+
+
 @contextmanager
 def record(path: str | Path):
     """
@@ -33,18 +45,17 @@ def record(path: str | Path):
             result = await my_agent.run("summarize document.txt")
     """
     tape = Tape()
-    sync_tr = RecordingTransport(tape)
-    async_tr = RecordingAsyncTransport(tape)
 
     orig_client = httpx.Client.__init__
     orig_async = httpx.AsyncClient.__init__
 
     def _patched_client(self: httpx.Client, *args: object, **kwargs: object) -> None:
-        kwargs.setdefault("transport", sync_tr)
+        # Wrap whatever transport the SDK provides (may be its own retry transport)
+        kwargs["transport"] = _wrap_sync(tape, kwargs.get("transport"))  # type: ignore[arg-type]
         orig_client(self, *args, **kwargs)
 
     def _patched_async(self: httpx.AsyncClient, *args: object, **kwargs: object) -> None:
-        kwargs.setdefault("transport", async_tr)
+        kwargs["transport"] = _wrap_async(tape, kwargs.get("transport"))  # type: ignore[arg-type]
         orig_async(self, *args, **kwargs)
 
     with (
@@ -85,11 +96,12 @@ def replay(path: str | Path):
     orig_async = httpx.AsyncClient.__init__
 
     def _patched_client(self: httpx.Client, *args: object, **kwargs: object) -> None:
-        kwargs.setdefault("transport", sync_tr)
+        # Replace any existing transport — we must serve from tape, not the network
+        kwargs["transport"] = sync_tr
         orig_client(self, *args, **kwargs)
 
     def _patched_async(self: httpx.AsyncClient, *args: object, **kwargs: object) -> None:
-        kwargs.setdefault("transport", async_tr)
+        kwargs["transport"] = async_tr
         orig_async(self, *args, **kwargs)
 
     with (
